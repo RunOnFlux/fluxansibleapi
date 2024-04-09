@@ -7,7 +7,8 @@ This is a multithreaded python api that allows simple interaction between users 
 - [About](#about)
 - [Features](#features)
 - [Installation](#installation)
-- [Usage](#usage)
+- [Developer Setup](#developer)
+- [Production Setup](#production)
 - [Api Endpoints](#api)
 - [Contributing](#contributing)
 - [License](#license)
@@ -32,42 +33,22 @@ This api allows users to send api commands which will be directed to ansible-pla
 
 ## Installation
 
-`git clone https://github.com/RunOnFlux/fluxansibleapi.git`
+1. `git clone https://github.com/RunOnFlux/fluxansibleapi.git`
 
-`cd fluxansibleapi`
+2. `cd fluxansibleapi`
 
-`pip install -r requirements.txt`
+3. `pip install -r requirements.txt`
 
 The requried packages that will get installed with requirements.txt are
 
 1. ansible_runner - https://github.com/ansible/ansible-runner
 2. Flask - https://flask.palletsprojects.com/en/3.0.x/
 
+## Developer
 
+### Requirements
 
-## Usage
-
-### Developer Mode
-
-#### Requirements
-
-1. Certificate and Key created and placed into the keys folder
-    - How to create a the key and cert file
-        - `openssl genrsa 2048 > host.key`
-        - `chmod 400 host.key`
-        - `openssl req -new -x509 -nodes -sha256 -days 365 -key host.key -out host.cert`
-
-#### Deploy
-
-1. `python3 app.py`
-
-### Production
-
-We will use Gunicorn to run the Flask servers in a production environment.
-
-#### Requirements
-
-1. Gunicorn - ([Install Instructions for your Operating System](https://docs.gunicorn.org/en/stable/install.html))
+1. Follow the [Install Instructions](#installation)
 
 2. Certificate and Key created and placed into the keys folder
     - How to create a the key and cert file
@@ -75,7 +56,27 @@ We will use Gunicorn to run the Flask servers in a production environment.
         - `chmod 400 host.key`
         - `openssl req -new -x509 -nodes -sha256 -days 365 -key host.key -out host.cert`
 
-#### Deploy
+### Deploy
+
+1. `python3 app.py`
+
+## Production
+
+We will use Gunicorn to run the Flask servers in a production environment.
+
+#### Requirements
+
+1. Complete the [Install Instructions](#installation)
+
+2. Certificate and Key created and placed into the keys folder
+    - How to create a the key and cert file
+        - `openssl genrsa 2048 > host.key`
+        - `chmod 400 host.key`
+        - `openssl req -new -x509 -nodes -sha256 -days 365 -key host.key -out host.cert`
+
+3. Gunicorn - ([Install Instructions for your Operating System](https://docs.gunicorn.org/en/stable/install.html))
+
+### Deploy
 
 This command will start the server listening on port 9999. You can change the pathing to your host.cert and host.key files to where they are stored. 
 
@@ -87,6 +88,26 @@ This command will start the server listening on port 9999. You can change the pa
 All requests require the following headers: 
 1. `x-api-key`: [Your API key]
 2. `Content-Type`: application/json
+
+### /api/
+
+This endpoint is the base endpoint and will let you know if you are whitelisted
+
+#### Request
+
+- **URL**: `/api/
+- **Method**: `GET`
+- **Headers**:
+  - `x-api-key`: [Your API key]
+
+#### Response
+
+- **Status Code**: `200 OK`
+- **Body** (JSON):
+  ```json
+  {
+    "message": "This is a whitelisted API endpoint with API key authentication"
+  } 
 
 ### /api/sendcommand
 

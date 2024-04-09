@@ -49,6 +49,8 @@ The requried packages that will get installed with requirements.txt are
 
 ## Developer
 
+Running this under as developer means that if you close your application, the threads running will also close
+
 ### Requirements
 
 1. Follow the [Install Instructions](#installation)
@@ -66,6 +68,7 @@ The requried packages that will get installed with requirements.txt are
 ## Production
 
 We will use Gunicorn to run the Flask servers in a production environment.
+All commands that are running when the server is stopped will continue to run until completed
 
 #### Requirements
 
@@ -210,7 +213,9 @@ This endpoint allows you to check on the status on an existing command that was 
   ```json
   {
     "ansible_started_time": "Tue Apr  9 11:08:25 2024",
-    "status": "running"
+    "status": "running",
+    "tag": "tag",
+    "pattern": "pattern"
   }
 
 - **Status Code**: `200 OK`
@@ -222,7 +227,9 @@ This endpoint allows you to check on the status on an existing command that was 
     "pattern": "pattern",
     "result": "[Truncated Ansible Output]",
     "status": "completed",
-    "tag": "ipcheck"
+    "tag": "ipcheck",
+    "ansible_return_code": 0,
+    "ansible_return_code_message": "ansible message about the command that ran"
   }
 
 ##### Error

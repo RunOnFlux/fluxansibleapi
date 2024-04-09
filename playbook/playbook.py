@@ -1,3 +1,8 @@
+# Copyright (c) 2024 Jeremy Anderson
+# Copyright (c) 2024 Influx Technologies Limited
+# Distributed under the MIT software license, see the accompanying
+# file LICENSE or https://www.opensource.org/licenses/mit-license.php.
+
 from ansible_runner import run_command
 from config.config import ALLOWED_TAGS, FLUX_PLAYBOOK_PATH, WORKING_DIR
 from thread_tracker.tracker import event_tracker, pattern_tracker, Command, event_tracker_lock, pattern_tracker_lock, delete_pattern

@@ -1,3 +1,8 @@
+# Copyright (c) 2024 Jeremy Anderson
+# Copyright (c) 2024 Influx Technologies Limited
+# Distributed under the MIT software license, see the accompanying
+# file LICENSE or https://www.opensource.org/licenses/mit-license.php.
+
 from flask import jsonify, request
 from playbook.playbook import run_playbook
 from thread_tracker.tracker import event_tracker, threads, is_pattern_running, get_pattern_id, Command, event_tracker_lock

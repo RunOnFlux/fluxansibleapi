@@ -1,3 +1,8 @@
+# Copyright (c) 2024 Jeremy Anderson
+# Copyright (c) 2024 Influx Technologies Limited
+# Distributed under the MIT software license, see the accompanying
+# file LICENSE or https://www.opensource.org/licenses/mit-license.php.
+
 from flask import Flask
 from flask_sslify import SSLify
 from auth.authentication import authenticate_request

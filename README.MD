@@ -95,7 +95,7 @@ This endpoint is the base endpoint and will let you know if you are whitelisted
 
 #### Request
 
-- **URL**: `/api/
+- **URL**: `/api/`
 - **Method**: `GET`
 - **Headers**:
   - `x-api-key`: [Your API key]

@@ -1,0 +1,1 @@
+In this folder, put your host.cert and host.key files

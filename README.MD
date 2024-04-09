@@ -39,6 +39,9 @@ This api allows users to send api commands which will be directed to ansible-pla
 
 3. `pip install -r requirements.txt`
 
+4. Copy the file [config-example.py](config/config-example.py) to a new file called `config.py`
+    - You must use config.py to store API KEYS, IP Addresses, Allowed Tags, and Allowed Pattern/Inventory
+
 The requried packages that will get installed with requirements.txt are
 
 1. ansible_runner - https://github.com/ansible/ansible-runner

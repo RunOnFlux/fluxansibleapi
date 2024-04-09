@@ -100,14 +100,28 @@ This endpoint is the base endpoint and will let you know if you are whitelisted
 - **Headers**:
   - `x-api-key`: [Your API key]
 
-#### Response
+#### Responses
 
 - **Status Code**: `200 OK`
 - **Body** (JSON):
   ```json
   {
     "message": "This is a whitelisted API endpoint with API key authentication"
-  } 
+  }
+
+- **Status Code**: `401 UNAUTHORIZED`
+- **Body** (JSON):
+  ```json
+  {
+    "error": "Invalid API key"
+  }
+
+- **Status Code**: `401 UNAUTHORIZED`
+- **Body** (JSON):
+  ```json
+  {
+    "error": "Unauthorized IP address"
+  }
 
 ### /api/sendcommand
 
@@ -127,7 +141,7 @@ This endpoint allows sending a command to the server.
     "tags": "tag1"
   }
 
-#### Response
+#### Responses
 
 - **Status Code**: `200 OK`
 - **Body** (JSON):
@@ -139,6 +153,33 @@ This endpoint allows sending a command to the server.
     "status": "started",
     "tags": "ipcheck",
     "tracker_event_id": "91543a7e-3d6d-4689-a90f-25d940dcfdf6"
+  }
+
+- **Status Code**: `200 OK`
+- **Body** (JSON):
+  ```json
+  {
+    "ansible_started_time": "Tue Apr  9 11:06:23 2024",
+    "message": "Pattern is busy executing another command",
+    "status": "failed",
+    "tags": "ipcheck",
+    "tracker_event_id": "43c62666-010e-4bc5-aee1-390e1c8af089"
+  }
+
+- **Status Code**: `400 BAD REQUEST`
+- **Body** (JSON):
+  ```json
+  {
+    "message": "Pattern not whitelisted",
+    "status": "failed"
+  }
+
+- **Status Code**: `400 BAD REQUEST`
+- **Body** (JSON):
+  ```json
+  {
+    "message": "Tag not whitelisted",
+    "status": "failed"
   }
 
 ### /api/checkstatus
@@ -159,7 +200,15 @@ This endpoint allows you to check on the status on an existing command that was 
   }
 
 
-#### Response
+#### Responses
+
+- **Status Code**: `200 OK`
+- **Body** (JSON):
+  ```json
+  {
+    "ansible_started_time": "Tue Apr  9 11:08:25 2024",
+    "status": "running"
+  }
 
 - **Status Code**: `200 OK`
 - **Body** (JSON):
@@ -171,6 +220,14 @@ This endpoint allows you to check on the status on an existing command that was 
     "result": "[Truncated Ansible Output]",
     "status": "completed",
     "tag": "ipcheck"
+  }
+
+##### Error
+- **Status Code**: `400 BAD REQUEST`
+- **Body** (JSON):
+  ```json
+  {
+    "error": "Tracker event not found"
   }
 
 

@@ -6,7 +6,7 @@
 from flask import jsonify, request
 from playbook.playbook import run_playbook
 from thread_tracker.tracker import event_tracker, threads, is_pattern_running, get_pattern_id, Command, event_tracker_lock
-from config.config import ALLOWED_PATTERNS
+from config.config import ALLOWED_PATTERNS, ALLOWED_TAGS
 from logger.logs import setup_logger
 
 import threading
@@ -49,12 +49,10 @@ def sendcommand():
         )
 
     if (pattern not in ALLOWED_PATTERNS):
-        return jsonify(
-            {
-                "status": "failed",
-                "message": "Pattern not whitelisted",
-            }
-        )
+        return jsonify({"error": "Pattern not whitelisted"}), 400
+    
+    if (tags not in ALLOWED_TAGS):
+        return jsonify({"error": "Tag not whitelisted"}), 400
 
     # Create the command object
     command = Command(pattern, tags)
@@ -131,5 +129,5 @@ def checkstatus():
                 }
             )
     else:
-        return jsonify({"error": "Tracker event not found"}), 404
+        return jsonify({"error": "Tracker event not found"}), 400
 

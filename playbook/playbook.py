@@ -32,6 +32,7 @@ def run_playbook(tracker_event_id):
         pattern_tracker[command.pattern] = (tracker_event_id, command.tag)
         pattern_tracker_lock.release()
 
+        # TODO - Figure out is this is the right way to do this
         # Change the current working directory to the desired directory
         # This might break things if dockerized, so keep an eye on this
         os.chdir(WORKING_DIR)
@@ -43,17 +44,10 @@ def run_playbook(tracker_event_id):
         output_fd=sys.stdout,
         error_fd=sys.stderr,
         )
-
-        # TODO - We need to store the errors in the command object, so we can relay this info via api. 
-        # TODO - Add return code to command object.
-        # TODO - should i get the stdout and put it in the command object? 
         
         logger.info("Return Code: %s", command.result.rc)
         logger.info("Output: %s", command.result.output)
         logger.info("Error: %s", command.result.error)
-        # print("Return Code: {}".format(rc))
-       # print("Output: {}".format(out))
-        #print("Error: {}".format(err))
 
     logger.info("Setting tracker to completed: Inventory: %s, Tag: %s, ID: %s", command.pattern, command.tag, tracker_event_id)
     

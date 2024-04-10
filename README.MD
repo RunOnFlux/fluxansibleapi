@@ -46,6 +46,9 @@ The requried packages that will get installed with requirements.txt are
 
 1. ansible_runner - https://github.com/ansible/ansible-runner
 2. Flask - https://flask.palletsprojects.com/en/3.0.x/
+3. Flask_Limiter - Api limiter
+4. Flask_SSLify - Ability to run over https in development mode
+5. redis==5.0.3 - Production Only - Needed for api limiting storage
 
 ## Developer
 
@@ -82,11 +85,19 @@ All commands that are running when the server is stopped will continue to run un
 
 3. Gunicorn - ([Install Instructions for your Operating System](https://docs.gunicorn.org/en/stable/install.html))
 
+4. Redis Server Installed and running
+    - `sudo apt install redis-server`
+    - `redis-server`
+    - `redis-cli ping`
+    If Redis is running, it should respond with "PONG".
+
+    If your Redis server isnt running at **redis://localhost:6379**, update the **REDIS_SERVER_PROD** value in [config.py](config/config.py) with the correct location 
+
 ### Deploy
 
 This command will start the server listening on port 9999. You can change the pathing to your host.cert and host.key files to where they are stored. 
 
-1. `gunicorn -b 0.0.0.0:9999 --certfile=/home/main/FluxNodeInstall/server/keys/host.cert --keyfile=/home/main/FluxNodeInstall/server/keys/host.key app:app`
+1. `gunicorn -b 0.0.0.0:9999 --certfile=/home/$(whoami)/fluxansiblepi/keys/host.cert --keyfile=/home/$(whoami)/fluxansiblepi/keys/host.key app:app`
 
 
 ## API

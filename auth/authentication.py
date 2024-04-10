@@ -7,6 +7,9 @@
 from flask import request, jsonify
 from config.config import API_KEYS
 from logger.logs import setup_logger
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from redis import Redis
 
 logger = setup_logger()
 
@@ -30,3 +33,16 @@ def authenticate_request():
         return jsonify({"error": "Unauthorized IP address"}), 401
     
     
+def setup_limiter(theapp, is_prod):
+    memory_location = 'memory://'
+
+    if (is_prod):
+        # Redis connection URI
+        memory_location = theapp.config['REDIS_SERVER_PROD'] 
+    
+    return  Limiter(
+        get_remote_address,
+        app=theapp,
+        default_limits=["1000 per day", "100 per hour", "10 per minute"],
+        storage_uri=memory_location
+    )

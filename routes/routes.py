@@ -59,7 +59,7 @@ def sendcommand():
                 "message": "Pattern is busy executing another command",
                 "tracker_event_id": pattern_event_id,
                 "tags": pattern_tags,
-                "ansible_started_time": datetime.datetime.fromtimestamp(pattern_command.started_timestamp).strftime('%c')
+                "ansible_started_time": timestamp_to_datestring(pattern_command.started_timestamp)
             }
         )
 

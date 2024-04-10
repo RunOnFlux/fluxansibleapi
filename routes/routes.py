@@ -8,6 +8,7 @@ from playbook.playbook import run_playbook
 from thread_tracker.tracker import event_tracker, threads, is_pattern_running, get_pattern_id, Command, event_tracker_lock
 from config.config import ALLOWED_PATTERNS, ALLOWED_TAGS
 from logger.logs import setup_logger
+from tools.helper import timestamp_to_datestring
 
 import threading
 import uuid
@@ -101,13 +102,9 @@ def sendcommand():
             "tracker_event_id": tracker_event_id,
             "tags": tags,
             "pattern": pattern,
-            "ansible_started_time": datetime.datetime.fromtimestamp(timestamp).strftime('%c')
+            "ansible_started_time": timestamp_to_datestring(timestamp)
         }
     )
-
-# Help function - TODO move this to a helper.py 
-def timestamp_to_datestring(timestamp):
-    return datetime.datetime.fromtimestamp(timestamp).strftime('%c')
 
 # Function to fetch the status of a current job id
 def checkstatus():

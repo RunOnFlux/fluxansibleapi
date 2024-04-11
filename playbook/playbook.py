@@ -11,9 +11,14 @@ from ansible_runner import run_command
 
 from config.config import ALLOWED_TAGS, FLUX_PLAYBOOK_PATH, WORKING_DIR
 from logger.logs import setup_logger
-from thread_tracker.tracker import (EventToTagMap, delete_pattern,
-                                    event_tracker, event_tracker_lock,
-                                    pattern_tracker, pattern_tracker_lock)
+from thread_tracker.tracker import (
+    EventToTagMap,
+    delete_pattern,
+    event_tracker,
+    event_tracker_lock,
+    pattern_tracker,
+    pattern_tracker_lock,
+)
 
 logger = setup_logger()
 

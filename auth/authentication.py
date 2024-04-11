@@ -30,9 +30,7 @@ def authenticate_request() -> Response:
     # Check if the client's IP address is in the allowed list for specific api key
     authorized_ips = set(API_KEYS.get(api_key))
     if client_ip not in authorized_ips:
-        logger.info(
-            f"Request Denied: Unauthorized IP address from: {client_ip}"
-        )
+        logger.info(f"Request Denied: Unauthorized IP address from: {client_ip}")
         return jsonify({"error": "Unauthorized IP address"}), 401
 
 

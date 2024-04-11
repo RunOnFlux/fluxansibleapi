@@ -11,8 +11,13 @@ from flask import Response, jsonify, request
 from config.config import ALLOWED_PATTERNS, ALLOWED_TAGS
 from logger.logs import setup_logger
 from playbook.playbook import run_playbook
-from thread_tracker.tracker import (Command, event_tracker, get_pattern_id,
-                                    is_pattern_running, threads)
+from thread_tracker.tracker import (
+    Command,
+    event_tracker,
+    get_pattern_id,
+    is_pattern_running,
+    threads,
+)
 from tools.helper import timestamp_to_datestring
 
 # Get the logger so we can log

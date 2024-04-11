@@ -40,9 +40,9 @@ class EventToTagMap:
 
 @dataclass
 class Result:
-    output: str
-    error: str
-    rc: str
+    output: str = ""
+    error: str = ""
+    rc: str = ""
 
 
 @dataclass
@@ -51,17 +51,17 @@ class Command:
 
     pattern: str
     tag: str
-    completed_timestamp: int
-    status: int
-    started_timestamp = field(default_factory=time.time)
-    tracker_event = field(default_factory=Event)
-    result = field(default_factory=Result)
+    completed_timestamp: float = 0
+    status: int = 0
+    started_timestamp : float = field(default_factory=time.time)
+    tracker_event : Event = field(default_factory=Event)
+    result : Result = field(default_factory=Result)
 
     def __str__(self) -> str:
         return f"Pattern: {self.pattern}, Tag: {self.tag}, IsSet: {self.tracker_event.is_set()}, started: {self.started_timestamp}, completed: {self.completed_timestamp}"
 
     def __bool__(self) -> bool:
-        return self.pattern and self.tag
+        return bool(self.pattern and self.tag)
 
     def set_start_time(self, started_time: float):
         self.started_timestamp = started_time
@@ -71,16 +71,6 @@ class Command:
 
     def set_status(self, status: int):
         self.status = status
-
-    # I left this as I wasn't sure where it was called from. With the __str__ dunder, you can
-    # just do things like print(command) which will called the __str__ method, or explicitly with str(command)
-    def to_string(self):
-        return f"Pattern: {self.pattern}, Tag: {self.tag}, IsSet: {self.tracker_event.is_set()}, started: {self.started_timestamp}, completed: {self.completed_timestamp}"
-
-    # Left this as well (but updated route), replaced with __bool__, so you can just do if(command): ...
-    def is_null(self):
-        return self.pattern == None or self.tag == None
-
 
 def is_pattern_running(pattern: str) -> bool:
     """Checks pattern_tracker for a pattern"""

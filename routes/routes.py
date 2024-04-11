@@ -57,11 +57,11 @@ def sendcommand() -> tuple[Response, int]:
     if "pattern" not in data:
         return jsonify({"error": "Pattern not provided"}), 400
 
-    if "tags" not in data:
-        return jsonify({"error": "Tags not provided"}), 400
+    if "tag" not in data:
+        return jsonify({"error": "Tag not provided"}), 400
 
     pattern = data["pattern"]
-    tags = data["tags"]
+    tag = data["tag"]
 
     # Check to see if this pattern is already running an ansible command
     # If so, we don't want to run another command and screw up the node
@@ -73,7 +73,7 @@ def sendcommand() -> tuple[Response, int]:
                 "status": "failed",
                 "message": "Pattern is busy executing another command",
                 "tracker_event_id": map.event_id,
-                "tags": map.tag,
+                "tag": map.tag,
                 "ansible_started_time": timestamp_to_datestring(
                     pattern_command.started_timestamp
                 ),
@@ -83,11 +83,11 @@ def sendcommand() -> tuple[Response, int]:
     if pattern not in ALLOWED_PATTERNS:
         return jsonify({"error": "Pattern not whitelisted"}), 400
 
-    if tags not in ALLOWED_TAGS:
+    if tag not in ALLOWED_TAGS:
         return jsonify({"error": "Tag not whitelisted"}), 400
 
     # Create the command object
-    command = Command(pattern, tags)
+    command = Command(pattern=pattern, tag=tag)
 
     # Generate a unique identifier for the tracker event
     tracker_event_id = str(uuid.uuid4())
@@ -108,7 +108,7 @@ def sendcommand() -> tuple[Response, int]:
             "status": "started",
             "message": "Ansible command execution started.",
             "tracker_event_id": tracker_event_id,
-            "tags": tags,
+            "tag": tag,
             "pattern": pattern,
             "ansible_started_time": timestamp_to_datestring(
                 command.started_timestamp

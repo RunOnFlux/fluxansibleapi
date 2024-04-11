@@ -53,9 +53,9 @@ class Command:
     tag: str
     completed_timestamp: float = 0
     status: int = 0
-    started_timestamp : float = field(default_factory=time.time)
-    tracker_event : Event = field(default_factory=Event)
-    result : Result = field(default_factory=Result)
+    started_timestamp: float = field(default_factory=time.time)
+    tracker_event: Event = field(default_factory=Event)
+    result: Result = field(default_factory=Result)
 
     def __str__(self) -> str:
         return f"Pattern: {self.pattern}, Tag: {self.tag}, IsSet: {self.tracker_event.is_set()}, started: {self.started_timestamp}, completed: {self.completed_timestamp}"
@@ -71,6 +71,7 @@ class Command:
 
     def set_status(self, status: int):
         self.status = status
+
 
 def is_pattern_running(pattern: str) -> bool:
     """Checks pattern_tracker for a pattern"""

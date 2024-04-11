@@ -110,9 +110,7 @@ def sendcommand() -> tuple[Response, int]:
             "tracker_event_id": tracker_event_id,
             "tag": tag,
             "pattern": pattern,
-            "ansible_started_time": timestamp_to_datestring(
-                command.started_timestamp
-            ),
+            "ansible_started_time": timestamp_to_datestring(command.started_timestamp),
         }
     )
 

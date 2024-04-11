@@ -42,25 +42,19 @@ def run_playbook(tracker_event_id: str):
                 tracker_event_id, command.tag
             )
 
-        # TODO - Figure out is this is the right way to do this
-        # Change the current working directory to the desired directory
-        # This might break things if dockerized, so keep an eye on this
-        os.chdir(WORKING_DIR)
-
-        command.result.output, command.result.error, command.result.rc = (
-            run_command(
-                executable_cmd="ansible-playbook",
-                cmdline_args=[
-                    FLUX_PLAYBOOK_PATH,
-                    "-l",
-                    command.pattern,
-                    "-t",
-                    command.tag,
-                ],
-                # input_fd=sys.stdin,
-                output_fd=sys.stdout,
-                error_fd=sys.stderr,
-            )
+        command.result.output, command.result.error, command.result.rc = run_command(
+            executable_cmd="ansible-playbook",
+            host_cwd=WORKING_DIR,
+            cmdline_args=[
+                FLUX_PLAYBOOK_PATH,
+                "-l",
+                command.pattern,
+                "-t",
+                command.tag,
+            ],
+            # input_fd=sys.stdin,
+            output_fd=sys.stdout,
+            error_fd=sys.stderr,
         )
 
         logger.info(

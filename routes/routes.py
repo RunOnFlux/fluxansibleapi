@@ -8,7 +8,13 @@ import uuid
 
 from flask import Response, jsonify, request
 
-from config.config import ALLOWED_PATTERNS, ALLOWED_TAGS, ALLOWED_PLAYBOOKS, ALLOW_DEFAULT_PLAYBOOK, DEFAULT_PLAYBOOK
+from config.config import (
+    ALLOWED_PATTERNS,
+    ALLOWED_TAGS,
+    ALLOWED_PLAYBOOKS,
+    ALLOW_DEFAULT_PLAYBOOK,
+    DEFAULT_PLAYBOOK,
+)
 from logger.logs import setup_logger
 from playbook.playbook import run_playbook
 from thread_tracker.tracker import (
@@ -65,8 +71,8 @@ def sendcommand() -> tuple[Response, int]:
 
     if "tag" not in data:
         return jsonify({"error": "Tag not provided"}), 400
-    
-    playbook = data.get("playbook") # Can be None
+
+    playbook = data.get("playbook")  # Can be None
     pattern = data["pattern"]
     tag = data["tag"]
 
@@ -108,14 +114,19 @@ def sendcommand() -> tuple[Response, int]:
             playbook_name = "default"
         else:
             return jsonify({"error": "Playbook not supported: default false"}), 400
-    
+
     # Final check on playbook, if default was selected and happen to be set to "" we don't want to proceed
     if not playbook_path:
         logger.info("playbook path is empty string")
         return jsonify({"error": "Playbook not supported: default empty string"}), 400
 
     # Create the command object
-    command = Command(pattern=pattern, tag=tag, playbook_name=playbook_name, playbook_path=playbook_path)
+    command = Command(
+        pattern=pattern,
+        tag=tag,
+        playbook_name=playbook_name,
+        playbook_path=playbook_path,
+    )
 
     # Generate a unique identifier for the tracker event
     tracker_event_id = str(uuid.uuid4())

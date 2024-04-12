@@ -40,7 +40,7 @@ This api allows users to send api commands which will be directed to ansible-pla
 3. `pip install -r requirements.txt`
 
 4. Copy the file [config-example.py](config/config-example.py) to a new file called `config.py`
-    - You must use config.py to store API KEYS, IP Addresses, Allowed Tags, and Allowed Pattern/Inventory
+    - You must use config.py to store API KEYS, IP Addresses, Allowed Tag, and Allowed Pattern/Inventory
 
 The requried packages that will get installed with requirements.txt are
 
@@ -155,7 +155,8 @@ This endpoint allows sending a command to the server.
   ```json
   {
     "pattern": "value",
-    "tags": "tag1"
+    "tag": "tag1",
+    "playbook": "nameofplaybook"
   }
 
 #### Responses
@@ -167,8 +168,9 @@ This endpoint allows sending a command to the server.
     "ansible_started_time": "Mon Apr 8 11:49:05 2024",
     "message": "Ansible command execution started.",
     "pattern": "pattern",
+    "playbook": "playbookname",
     "status": "started",
-    "tags": "ipcheck",
+    "tag": "ipcheck",
     "tracker_event_id": "91543a7e-3d6d-4689-a90f-25d940dcfdf6"
   }
 
@@ -179,7 +181,8 @@ This endpoint allows sending a command to the server.
     "ansible_started_time": "Tue Apr  9 11:06:23 2024",
     "message": "Pattern is busy executing another command",
     "status": "failed",
-    "tags": "ipcheck",
+    "tag": "ipcheck",
+    "playbook": "playbookname",
     "tracker_event_id": "43c62666-010e-4bc5-aee1-390e1c8af089"
   }
 
@@ -187,16 +190,35 @@ This endpoint allows sending a command to the server.
 - **Body** (JSON):
   ```json
   {
-    "message": "Pattern not whitelisted",
-    "status": "failed"
+    "message": "Pattern not whitelisted"
   }
 
 - **Status Code**: `400 BAD REQUEST`
 - **Body** (JSON):
   ```json
   {
-    "message": "Tag not whitelisted",
-    "status": "failed"
+    "message": "Tag not whitelisted"
+  }
+
+- **Status Code**: `400 BAD REQUEST`
+- **Body** (JSON):
+  ```json
+  {
+    "message": "Playbook not whitelisted"
+  }
+
+- **Status Code**: `400 BAD REQUEST`
+- **Body** (JSON):
+  ```json
+  {
+    "message": "Playbook not supported: default false"
+  }
+
+- **Status Code**: `400 BAD REQUEST`
+- **Body** (JSON):
+  ```json
+  {
+    "message": "Playbook not supported: default empty string"
   }
 
 ### /api/checkstatus
@@ -226,7 +248,8 @@ This endpoint allows you to check on the status on an existing command that was 
     "ansible_started_time": "Tue Apr  9 11:08:25 2024",
     "status": "running",
     "tag": "tag",
-    "pattern": "pattern"
+    "pattern": "pattern",
+    "playbook": "playbookname"
   }
 
 - **Status Code**: `200 OK`
@@ -236,6 +259,7 @@ This endpoint allows you to check on the status on an existing command that was 
     "ansible_completed_time": "Mon Apr 8 10:43:52 2024",
     "ansible_started_time": "Mon Apr 8 10:42:50 2024",
     "pattern": "pattern",
+    "playbook": "playbookname",
     "result": "[Truncated Ansible Output]",
     "status": "completed",
     "tag": "ipcheck",

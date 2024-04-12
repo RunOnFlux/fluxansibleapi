@@ -46,7 +46,7 @@ def run_playbook(tracker_event_id: str):
             executable_cmd="ansible-playbook",
             host_cwd=WORKING_DIR,
             cmdline_args=[
-                FLUX_PLAYBOOK_PATH,
+                command.playbook_path,
                 "-l",
                 command.pattern,
                 "-t",

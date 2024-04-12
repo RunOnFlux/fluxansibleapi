@@ -1,5 +1,16 @@
 # Path to the flux.yml or another ansible yml file you want
 FLUX_PLAYBOOK_PATH = "/home/root/FluxNodeInstall/flux.yml"
+SSHSETUP_PLAYBOOK_PATH = "/home/root/FluxNodeInstall/playbooks/ssh_setup.yml"
+
+# Set a default playbook, this will be used if no playbook is passed in via api
+DEFAULT_PLAYBOOK = FLUX_PLAYBOOK_PATH
+ALLOW_DEFAULT_PLAYBOOK = True # If false playbooks must be passed through via api
+
+# List of allowed playbooks to run by keyword
+ALLOWED_PLAYBOOKS = {
+    'flux': FLUX_PLAYBOOK_PATH,
+    'ssh_setup': SSHSETUP_PLAYBOOK_PATH,
+}
 
 # The directory to run ansible-playbook command
 WORKING_DIR = "/home/root/FluxNodeInstall"

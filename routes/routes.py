@@ -8,7 +8,7 @@ import uuid
 
 from flask import Response, jsonify, request
 
-from config.config import ALLOWED_PATTERNS, ALLOWED_TAGS
+from config.config import ALLOWED_PATTERNS, ALLOWED_TAGS, ALLOWED_PLAYBOOKS, ALLOW_DEFAULT_PLAYBOOK, DEFAULT_PLAYBOOK
 from logger.logs import setup_logger
 from playbook.playbook import run_playbook
 from thread_tracker.tracker import (
@@ -54,12 +54,19 @@ def sendcommand() -> tuple[Response, int]:
     """Send command function that creates threaded call to ansible-playbook"""
     # Get the required data from the api call
     data = request.get_json()
+
+    # If ALLOW_DEFAULT_PLAYBOOK is set to False, playbook is required
+    if not ALLOW_DEFAULT_PLAYBOOK:
+        if "playbook" not in data:
+            return jsonify({"error": "playbook required"}), 400
+
     if "pattern" not in data:
         return jsonify({"error": "Pattern not provided"}), 400
 
     if "tag" not in data:
         return jsonify({"error": "Tag not provided"}), 400
-
+    
+    playbook = data.get("playbook") # Can be None
     pattern = data["pattern"]
     tag = data["tag"]
 
@@ -86,8 +93,29 @@ def sendcommand() -> tuple[Response, int]:
     if tag not in ALLOWED_TAGS:
         return jsonify({"error": "Tag not whitelisted"}), 400
 
+    playbook_path = ""
+    playbook_name = ""
+
+    if playbook:
+        if playbook not in ALLOWED_PLAYBOOKS:
+            return jsonify({"error": "Playbook not whitelisted"}), 400
+        else:
+            playbook_path = ALLOWED_PLAYBOOKS.get(playbook)
+            playbook_name = playbook
+    else:
+        if ALLOW_DEFAULT_PLAYBOOK:
+            playbook_path = DEFAULT_PLAYBOOK
+            playbook_name = "default"
+        else:
+            return jsonify({"error": "Playbook not supported: default false"}), 400
+    
+    # Final check on playbook, if default was selected and happen to be set to "" we don't want to proceed
+    if not playbook_path:
+        logger.info("playbook path is empty string")
+        return jsonify({"error": "Playbook not supported: default empty string"}), 400
+
     # Create the command object
-    command = Command(pattern=pattern, tag=tag)
+    command = Command(pattern=pattern, tag=tag, playbook_name=playbook_name, playbook_path=playbook_path)
 
     # Generate a unique identifier for the tracker event
     tracker_event_id = str(uuid.uuid4())
@@ -110,6 +138,7 @@ def sendcommand() -> tuple[Response, int]:
             "tracker_event_id": tracker_event_id,
             "tag": tag,
             "pattern": pattern,
+            "playbook": playbook_name,
             "ansible_started_time": timestamp_to_datestring(command.started_timestamp),
         }
     )
@@ -148,6 +177,7 @@ def checkstatus() -> tuple[Response, int]:
                     ),
                     "tag": command.tag,
                     "pattern": command.pattern,
+                    "playbook": playbook_name,
                     "result": command.result.output,
                     "ansible_return_code": command.result.rc,
                     "ansible_return_code_message": rc_message,
@@ -165,6 +195,7 @@ def checkstatus() -> tuple[Response, int]:
                     ),
                     "tag": command.tag,
                     "pattern": command.pattern,
+                    "playbook": playbook_name,
                 }
             ),
             200,

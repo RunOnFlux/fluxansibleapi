@@ -51,6 +51,8 @@ class Command:
 
     pattern: str
     tag: str
+    playbook_name: str
+    playbook_path: str
     completed_timestamp: float = 0
     status: int = 0
     started_timestamp: float = field(default_factory=time.time)
@@ -58,7 +60,7 @@ class Command:
     result: Result = field(default_factory=Result)
 
     def __str__(self) -> str:
-        return f"Pattern: {self.pattern}, Tag: {self.tag}, IsSet: {self.tracker_event.is_set()}, started: {self.started_timestamp}, completed: {self.completed_timestamp}"
+        return f"Pattern: {self.pattern}, Tag: {self.tag}, Playbook_Name: {self.playbook_name}, Playbook_Path: {self.playbook_path}, IsSet: {self.tracker_event.is_set()}, started: {self.started_timestamp}, completed: {self.completed_timestamp}"
 
     def __bool__(self) -> bool:
         return bool(self.pattern and self.tag)

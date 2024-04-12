@@ -39,6 +39,9 @@ coverage.xml
 # Translations
 *.mo
 
+#VSCode
+.vscode
+
 # Mr Developer
 .mr.developer.cfg
 .project

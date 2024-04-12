@@ -51,6 +51,8 @@ def run_playbook(tracker_event_id: str):
                 command.pattern,
                 "-t",
                 command.tag,
+                "--extra-vars",
+                command.extra_vars,
             ],
             # input_fd=sys.stdin,
             output_fd=sys.stdout,

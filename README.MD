@@ -156,7 +156,8 @@ This endpoint allows sending a command to the server.
   {
     "pattern": "value",
     "tag": "tag1",
-    "playbook": "nameofplaybook"
+    "playbook": "nameofplaybook", // (optional)
+    "extra_vars": "extra_var_str", // (optional)
   }
 
 #### Responses

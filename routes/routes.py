@@ -75,6 +75,7 @@ def sendcommand() -> tuple[Response, int]:
     playbook = data.get("playbook")  # Can be None
     pattern = data["pattern"]
     tag = data["tag"]
+    extra_vars = data.get("extra_vars")
 
     # Check to see if this pattern is already running an ansible command
     # If so, we don't want to run another command and screw up the node
@@ -120,12 +121,17 @@ def sendcommand() -> tuple[Response, int]:
         logger.info("playbook path is empty string")
         return jsonify({"error": "Playbook not supported: default empty string"}), 400
 
+    # If extra_vars wasn't included in the api call, it is None. So Set it to empty string
+    if not extra_vars:
+        extra_vars = ""
+
     # Create the command object
     command = Command(
         pattern=pattern,
         tag=tag,
         playbook_name=playbook_name,
         playbook_path=playbook_path,
+        extra_vars=extra_vars,
     )
 
     # Generate a unique identifier for the tracker event

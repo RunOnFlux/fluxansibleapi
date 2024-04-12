@@ -38,6 +38,15 @@ def run_playbook(tracker_event_id: str):
     if command.tag in ALLOWED_TAGS:
         # Set the status of the pattern to the tracker_event_id
         with pattern_tracker_lock:
+            # This shouldn't happen: but we better double check there wasn't a race condition that
+            # allowed pattern to be started while this command was being parsed
+            # Even though this shouldn't happen, it is important to have redudency
+            if pattern_tracker.get(command.pattern, None):
+                logger.info(
+                    f"Pattern was found running already. Stopping Command: Inventory: {command.pattern}, Tag: {command.tag}, ID: {tracker_event_id}"
+                )
+                return
+
             pattern_tracker[command.pattern] = EventToTagMap(
                 tracker_event_id, command.tag
             )

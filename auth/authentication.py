@@ -13,11 +13,22 @@ from logger.logs import setup_logger
 
 logger = setup_logger()
 
+def get_client_ip():
+    # Check if the request came through Cloudflare
+    if 'CF-Connecting-IP' in request.headers:
+        return request.headers['CF-Connecting-IP']
+    elif 'X-Forwarded-For' in request.headers:
+        # Split X-Forwarded-For header to get the original client IP address
+        return request.headers['X-Forwarded-For'].split(',')[0]
+    else:
+        # If the headers are not present, return the remote address
+        return request.remote_addr
+
 
 def authenticate_request() -> Response:
 
     # Get the client's IP address
-    client_ip = request.remote_addr
+    client_ip = get_client_ip()
 
     logger.info(f"Received Request from: {client_ip}")
 

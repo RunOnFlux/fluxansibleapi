@@ -121,9 +121,13 @@ def sendcommand() -> tuple[Response, int]:
         logger.info("playbook path is empty string")
         return jsonify({"error": "Playbook not supported: default empty string"}), 400
 
-    # If extra_vars wasn't included in the api call, it is None. So Set it to empty string
+    # If extra_vars wasn't included in the api call, it is None. So Set it to empty dict
     if not extra_vars:
-        extra_vars = ""
+        extra_vars = {}
+
+    # Check if the extra_vars is a dictionary
+    if not isinstance(extra_vars, dict):
+        return jsonify({"error": "extra_vars must be a dictionary"}), 400
 
     # Create the command object
     command = Command(
@@ -194,7 +198,7 @@ def checkstatus() -> tuple[Response, int]:
                     ),
                     "tag": command.tag,
                     "pattern": command.pattern,
-                    "playbook": playbook_name,
+                    "playbook": command.playbook_name,
                     "result": command.result.output,
                     "ansible_return_code": command.result.rc,
                     "ansible_return_code_message": rc_message,

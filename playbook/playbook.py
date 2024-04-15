@@ -6,6 +6,7 @@
 import os
 import sys
 import time
+import json
 
 from ansible_runner import run_command
 
@@ -51,6 +52,8 @@ def run_playbook(tracker_event_id: str):
                 tracker_event_id, command.tag
             )
 
+        extra_vars_json = json.dumps(command.extra_vars)
+
         command.result.output, command.result.error, command.result.rc = run_command(
             executable_cmd="ansible-playbook",
             host_cwd=WORKING_DIR,
@@ -61,7 +64,7 @@ def run_playbook(tracker_event_id: str):
                 "-t",
                 command.tag,
                 "--extra-vars",
-                command.extra_vars,
+                extra_vars_json,
             ],
             # input_fd=sys.stdin,
             output_fd=sys.stdout,

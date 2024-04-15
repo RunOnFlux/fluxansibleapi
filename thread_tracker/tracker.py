@@ -53,7 +53,7 @@ class Command:
     tag: str
     playbook_name: str
     playbook_path: str
-    extra_vars: str = field(default_factory="")
+    extra_vars: dict = field(default_factory={})
     completed_timestamp: float = 0
     status: int = 0
     started_timestamp: float = field(default_factory=time.time)

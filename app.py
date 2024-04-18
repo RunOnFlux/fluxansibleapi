@@ -4,7 +4,6 @@
 # file LICENSE or https://www.opensource.org/licenses/mit-license.php.
 
 import atexit
-import os
 
 from flask import Flask
 from flask_sslify import SSLify
@@ -13,6 +12,7 @@ from auth.authentication import authenticate_request, setup_limiter
 from logger.logs import setup_logger
 from routes.routes import base, checkstatus, sendcommand
 from thread_tracker.tracker import cleanup, schedule_start
+from tools.helper import verify_config
 
 
 # Graceful shutdown hook for Gunicorn
@@ -37,12 +37,8 @@ sslify = SSLify(app)
 logger = setup_logger()
 app.config.from_pyfile("config/config.py")
 
-# Ensure ENV is set to 'production' when running with Gunicorn
-if "gunicorn" in os.environ.get("SERVER_SOFTWARE", ""):
-    if app.config.get("ENV") != "production":
-        raise ValueError(
-            "ENV configuration variable must be set to 'production' when running with Gunicorn."
-        )
+# Verify the config file is valid
+verify_config(app)
 
 
 # Setup the api rate limiter

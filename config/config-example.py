@@ -23,11 +23,19 @@ ENV = "production"
 # The production location that the redis server is running at
 REDIS_SERVER_PROD = "redis://localhost:6379"
 
-# Dictionary of whitelisted api keys with the associated ip address
+# Dictionary of whitelisted api keys with the associated ip address, tags, patterns available to each api key
 # You can use /tools/api-key-generator.py to generate keys if you need to
 API_KEYS = {
-    "api-key-here": "127.0.0.1",  # Localhost
-    "api-key-here": "ip-address-here",  # Localhost
+    "api-key-here": {
+        "whitelisted_ipaddress": "127.0.0.1",  # Localhost
+        "whitelisted_tags": {"all"},
+        "whitelisted_patterns": {"all"},
+    },
+    "api-key-here": {
+        "whitelisted_ipaddress": "ip-address-here",
+        "whitelisted_tags": {"ipcheck"},
+        "whitelisted_patterns": {"nickname"},
+    },
 }
 
 # List of allowed tags to run with ansible playbook

@@ -216,7 +216,7 @@ def checkstatus() -> tuple[Response, int]:
                     ),
                     "tag": command.tag,
                     "pattern": command.pattern,
-                    "playbook": playbook_name,
+                    "playbook": command.playbook_name,
                 }
             ),
             200,
